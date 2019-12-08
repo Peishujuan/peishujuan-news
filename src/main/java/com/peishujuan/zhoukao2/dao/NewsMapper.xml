@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peishujuan.zhoukao2.dao.NewsMapper">
+	<insert id="insertBatch">
+		insert into t_news_link (id,title,url,score,created) values 
+		<foreach collection="list" item="n" separator=",">
+			(#{n.id},#{n.title},#{n.url},#{n.score},#{n.created})
+		</foreach>
+		
+	</insert>
+
+	<select id="getNewsList" resultType="News">
+		select * from t_news_link
+		<where>
+			<if test="title!=null and title!='' ">
+				and title like '%${title}%'
+			</if>
+		</where>
+		<if test="(orderName!=null and orderName!='') and (orderMethod !=null and orderMethod !='' ) ">
+			order by ${orderName} ${orderMethod}
+		</if>
+	</select>
+</mapper>
+
